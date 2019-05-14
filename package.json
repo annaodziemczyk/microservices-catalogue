@@ -1,9 +1,22 @@
 {
     "name": "node-api",
     "main": "server.js",
+    "scripts": {
+        "start": "node node_modules/nodemon/bin/nodemon.js app.js"
+    },
     "dependencies": {
+        "boom": "^7.3.0",
+        "fastify": "^2.3.0",
+        "fastify-multipart": "^0.8.1",
+        "fastify-swagger": "^2.4.0",
+        "fs": "0.0.1-security",
+        "mongoose": "^5.5.8",
+        "mosca": "^2.8.3",
+        "mqtt": "^2.18.8",
         "multiparty": "^4.2.1",
         "mysql": "^2.16.0",
-        "node-static": "^0.7.11"
+        "node-static": "^0.7.11",
+        "nodemon": "^1.19.0",
+        "pump": "^3.0.0"
     }
 }
