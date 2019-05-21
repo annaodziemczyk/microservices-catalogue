@@ -1,10 +1,18 @@
 const boom = require('boom');
 const pump = require('pump');
 const fs = require('fs');
+const fastify = require('fastify')();
+const serveStatic = require('serve-static');
+
+
 
 // Get Data Models
 const Product = require('../models/Product');
 const productImgDir = './catalogue/images';
+
+fastify.use('/', serveStatic("images"));
+
+
 
 // Get all products
 exports.getProducts = async (req, reply) => {
