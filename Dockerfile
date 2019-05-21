@@ -1,4 +1,4 @@
-FROM node:6.9.2
+FROM node:12.3.0
 EXPOSE 3002
 COPY . .
 RUN npm install

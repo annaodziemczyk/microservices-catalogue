@@ -39,8 +39,12 @@ const start = async () => {
 };
 start();
 
+//mongodb+srv://admin:<password>@cluster0-oacux.gcp.mongodb.net/test?retryWrites=true
 // Connect to DB
-mongoose.connect('mongodb://localhost/catalogue_db')
+// mongoose.connect('mongodb://localhost/catalogue_db')
+//     .then(() => console.log('MongoDB connected…'))
+//     .catch(err => console.log(err));
+mongoose.connect('mongodb+srv://admin:dangerous@cluster0-oacux.gcp.mongodb.net/test?retryWrites=true/catalogue_db')
     .then(() => console.log('MongoDB connected…'))
     .catch(err => console.log(err));
 
