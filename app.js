@@ -32,22 +32,26 @@ if(process.env.MONGO_PASS==undefined){
 }else {
 // Connect to DB
     mongoose.connect('mongodb+srv://admin:'+ (process.env.MONGO_PASS).trim() + '@catalogue-lldf2.gcp.mongodb.net/test?retryWrites=true')
-        .then(() => console.log('MongoDB connected…'))
+        .then(() => {
+            console.log('MongoDB connected…');
+            // Run the server!
+            const start = async () => {
+                try {
+                    await fastify.listen(3002);
+                    fastify.swagger();
+                    fastify.log.info(`server listening on ${fastify.server.address().port}`)
+                } catch (err) {
+                    fastify.log.error(err);
+                    process.exit(1)
+                }
+            };
+            start();
+        }
+
+
+        )
         .catch(err => console.log(err));
 }
-
-// Run the server!
-const start = async () => {
-    try {
-        await fastify.listen(3002);
-        fastify.swagger();
-        fastify.log.info(`server listening on ${fastify.server.address().port}`)
-    } catch (err) {
-        fastify.log.error(err);
-        process.exit(1)
-    }
-};
-start();
 
 
 // var mqtt = require('mqtt');
