@@ -26,6 +26,16 @@ const swagger = require('./config/swagger');
 // Register Swagger
 fastify.register(require('fastify-swagger'), swagger.options);
 
+
+if(process.env.MONGO_PASS==undefined){
+    throw Error("MongoDB password not set");
+}else {
+// Connect to DB
+    mongoose.connect('mongodb+srv://admin:'+ (process.env.MONGO_PASS).trim() + '@catalogue-lldf2.gcp.mongodb.net/test?retryWrites=true')
+        .then(() => console.log('MongoDB connected…'))
+        .catch(err => console.log(err));
+}
+
 // Run the server!
 const start = async () => {
     try {
@@ -38,15 +48,6 @@ const start = async () => {
     }
 };
 start();
-
-if(process.env.MONGO_PASS==undefined){
-    throw Error("MongoDB password not set");
-}else {
-// Connect to DB
-    mongoose.connect('mongodb+srv://admin:'+ (process.env.MONGO_PASS).trim() + '@catalogue-lldf2.gcp.mongodb.net/test?retryWrites=true')
-        .then(() => console.log('MongoDB connected…'))
-        .catch(err => console.log(err));
-}
 
 
 // var mqtt = require('mqtt');
