@@ -37,9 +37,15 @@ if(process.env.MONGO_PASS==undefined){
             // Run the server!
             const start = async () => {
                 try {
-                    await fastify.listen(3002);
-                    fastify.swagger();
-                    fastify.log.info(`server listening on ${fastify.server.address().port}`)
+                    await fastify.listen(3002, '0.0.0.0', function (err, address) {
+                        if (err) {
+                            fastify.log.error(err);
+                            process.exit(1)
+                        }
+                        fastify.swagger();
+                        fastify.log.info(`server listening on ${fastify.server.address().port}`);
+                    });
+
                 } catch (err) {
                     fastify.log.error(err);
                     process.exit(1)
