@@ -39,24 +39,26 @@ const start = async () => {
 };
 start();
 
-
+if(process.env.MONGO_PASS==undefined){
+    throw Error("MongoDB password not set");
+}else {
 // Connect to DB
-mongoose.connect('mongodb://localhost/catalogue_db')
-    .then(() => console.log('MongoDB connected…'))
-    .catch(err => console.log(err));
+    mongoose.connect('mongodb+srv://admin:'+ (process.env.MONGO_PASS).trim() + '@catalogue-lldf2.gcp.mongodb.net/test?retryWrites=true')
+        .then(() => console.log('MongoDB connected…'))
+        .catch(err => console.log(err));
+}
 
 
+// var mqtt = require('mqtt');
+// var client  = mqtt.connect('mqtt://localhost:1883');
 
-var mqtt = require('mqtt');
-var client  = mqtt.connect('mqtt://localhost:1883');
-
-client.on('connect', function () {
-    client.subscribe('myTopic');
-});
-client.on('message', function (topic, message) {
-    context = message.toString();
-    console.log(context);
-});
+// client.on('connect', function () {
+//     client.subscribe('myTopic');
+// });
+// client.on('message', function (topic, message) {
+//     context = message.toString();
+//     console.log(context);
+// });
 
 client.publish('myTopic', 'Hello mqtt');
 
