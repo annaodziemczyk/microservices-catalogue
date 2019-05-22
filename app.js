@@ -60,7 +60,7 @@ if(process.env.MONGO_PASS==undefined){
 //     console.log(context);
 // });
 
-client.publish('myTopic', 'Hello mqtt');
+// client.publish('myTopic', 'Hello mqtt');
 
 // var http = require('http'),
 //     fs = require('fs'),
