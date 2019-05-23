@@ -2,15 +2,22 @@ const boom = require('boom');
 const pump = require('pump');
 const fs = require('fs');
 const fastify = require('fastify')();
-const serveStatic = require('serve-static');
+// const serveStatic = require('serve-static');
+const Joi = require('joi');
 
+const productSchema = Joi.object({
+    name: Joi.string().required(),
+    price: Joi.number().required(),
+    quantity: Joi.number().required(),
+    image: Joi.object().required()
+});
 
 
 // Get Data Models
 const Product = require('../models/Product');
 const productImgDir = './catalogue/images';
 
-fastify.use('/', serveStatic("images"));
+// fastify.use('/', serveStatic("images"));
 
 
 
@@ -54,8 +61,16 @@ exports.addProduct = async (req, reply) => {
         }
 
         function productFileUploadCompleted (err) {
-            product.save();
-            reply.code(200).send();
+            try {
+                let cart = Joi.validate(product, productSchema, {abortEarly: false});
+
+                product.save();
+                reply.code(200).send(product);
+
+            } catch (err) {
+                throw boom.boomify(err);
+            }
+
         }
 
         mp.on('field', function (key, value) {
@@ -86,7 +101,12 @@ exports.deleteProduct = async (req, reply) => {
     try {
         const id = req.params.id;
         const product = await Product.findByIdAndRemove(id);
-        return product;
+        if(product){
+            return product;
+        }else{
+            throw boom.boomify(new Error("Product does not exist"));
+        }
+
     } catch (err) {
         throw boom.boomify(err);
     }

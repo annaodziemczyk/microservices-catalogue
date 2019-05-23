@@ -1,5 +1,5 @@
 exports.options = {
-    routePrefix: '/documentation',
+    routePrefix: '/api',
     exposeRoute: true,
     swagger: {
         info: {
