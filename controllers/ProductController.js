@@ -1,7 +1,7 @@
 const boom = require('boom');
 const pump = require('pump');
 const fs = require('fs');
-const fastify = require('fastify')();
+var streamToBuffer = require('stream-to-buffer');
 // const serveStatic = require('serve-static');
 const Joi = require('joi');
 
@@ -16,10 +16,6 @@ const productSchema = Joi.object({
 // Get Data Models
 const Product = require('../models/Product');
 const productImgDir = './catalogue/images';
-
-// fastify.use('/', serveStatic("images"));
-
-
 
 // Get all products
 exports.getProducts = async (req, reply) => {
@@ -49,21 +45,29 @@ exports.addProduct = async (req, reply) => {
         var mp = req.multipart(addNewProductHandler, productFileUploadCompleted);
 
         var product = new Product();
-        var pathToProductFile=productImgDir + "/" ;
+        // var pathToProductFile=productImgDir + "/" ;
 
         function addNewProductHandler(field, file, filename, encoding, mimetype) {
-            pathToProductFile+=filename + ".png";
-            product.image={
-                contentType:"image/png",
-                data:encoding
-            };
-            pump(file, fs.createWriteStream(pathToProductFile));
+            streamToBuffer(file, function (err, buffer) {
+                // let base64 = buffer.toString('base64');
+                // let image = new Buffer(base64, 'base64');
+
+                product.image={
+                    mimeType:mimetype,
+                    data:buffer,
+                    name:filename
+                };
+                product.save();
+                reply.code(200).send(product);
+            });
+
+            // pump(file, fs.createWriteStream(pathToProductFile));
         }
 
         function productFileUploadCompleted (err) {
             try {
-                let cart = Joi.validate(product, productSchema, {abortEarly: false});
 
+                // let cart = Joi.validate(product, productSchema, {abortEarly: false});
                 product.save();
                 reply.code(200).send(product);
 
