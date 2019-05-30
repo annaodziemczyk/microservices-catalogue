@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const routes = require('./routes');
-var mosca = require('mosca');
+const MqttController = require('./controllers/MqttController');
+
 // Import Swagger Options
 const swagger = require('./config/swagger');
 
@@ -18,6 +19,7 @@ fastify.register(require('fastify-multipart'), {
         headerPairs: 2000   // Max number of header key=>value pairs
     }
 });
+
 
 if(process.env.MONGO_PASS==undefined){
     throw Error("MongoDB password not set");
@@ -46,6 +48,12 @@ if(process.env.MONGO_PASS==undefined){
                         }
                         fastify.swagger();
                         fastify.log.info(`server listening on ${fastify.server.address().port}`);
+                    });
+
+                    MqttController.connect();
+
+                    MqttController.subscribe("CART_ITEM_ADDED", (err)=>{
+                        console.log("err");
                     });
 
                 } catch (err) {

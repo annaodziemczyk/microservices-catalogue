@@ -4,6 +4,7 @@ const fs = require('fs');
 var streamToBuffer = require('stream-to-buffer');
 // const serveStatic = require('serve-static');
 const Joi = require('joi');
+const mqttController = require('./MqttController');
 
 const productSchema = Joi.object({
     name: Joi.string().required(),
@@ -57,7 +58,6 @@ exports.addProduct = async (req, reply) => {
                     data:buffer,
                     name:filename
                 };
-                product.save();
                 reply.code(200).send(product);
             });
 
@@ -65,16 +65,11 @@ exports.addProduct = async (req, reply) => {
         }
 
         function productFileUploadCompleted (err) {
-            try {
-
-                // let cart = Joi.validate(product, productSchema, {abortEarly: false});
-                product.save();
-                reply.code(200).send(product);
-
-            } catch (err) {
+            if(err){
                 throw boom.boomify(err);
             }
 
+            reply.send();
         }
 
         mp.on('field', function (key, value) {
