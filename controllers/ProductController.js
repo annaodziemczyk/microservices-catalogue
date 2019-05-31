@@ -58,6 +58,7 @@ exports.addProduct = async (req, reply) => {
                     data:buffer,
                     name:filename
                 };
+                product.save();
                 reply.code(200).send(product);
             });
 
