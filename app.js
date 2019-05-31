@@ -28,7 +28,7 @@ if(process.env.MONGO_PASS==undefined){
     const local_db = 'mongodb://localhost/catalogue';
 
 // Connect to DB
-    mongoose.connect(local_db)
+    mongoose.connect(db)
         .then(() => {
             console.log('MongoDB connected…');
             // Run the server!
