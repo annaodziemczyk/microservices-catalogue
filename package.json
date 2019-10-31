@@ -12,7 +12,7 @@
         "fastify-swagger": "^2.4.0",
         "fs": "0.0.1-security",
         "joi": "^14.3.1",
-        "mongoose": "^5.5.8",
+        "mongoose": "^5.7.5",
         "mqtt": "^2.18.8",
         "nodemon": "^1.19.0",
         "path": "^0.12.7",
